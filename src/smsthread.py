@@ -8,18 +8,19 @@ import BeautifulSoup
 from googlevoice import Voice
 from googlevoice import util
 from PyQt4.QtCore import (QThread, SIGNAL) 
+from googlevoice.settings import INBOX
 
 class SmsThread(QThread):
-        
     def set_credentials(self, email=None, passwd=None):
         """
         set_credentials -- establish the login credentials for Google Voice
         If unspecified, pygooglevoice reverts to looking for ~/.gvoice 
         """
-        self.voice = Voice()
         self.email = email
         self.passwd = passwd
-        self.callback = None
+                
+        self.voice = Voice()
+        self.already_read_ids = list()
 
     def run(self):
         """
@@ -28,7 +29,6 @@ class SmsThread(QThread):
         the Qt signal finished_parsing(PyQt_PyObject) 
         """
         self.voice.login(self.email, self.passwd)
-        self.already_read_ids = list()
         self.update_sms()  
         self.emit(SIGNAL("finished_parsing(PyQt_PyObject)"), self.all_msgs)
 
@@ -59,12 +59,21 @@ class SmsThread(QThread):
 
     def update_sms(self):
         try:
-            self.voice.sms()
-            every_message = self.extract_sms(self.voice.sms.html)
+            # unread_messages = list()        
+            #self.voice.inbox()
+            #print(self.voice.inbox.html)
+            #    if not message.isRead:
+            #        print(message)
+            #        unread_messages.append(message)
+            self.voice.inbox() 
+#            for msg in inboxFolder.messages:
+#                msg.delete(1)
+#             
+            every_message = self.extract_sms(self.voice.inbox.html)
             self.all_msgs = list()
             
             for msg in every_message:
-                aKey = str(msg['id']) + str(msg['from']) + str(msg['time'])
+                aKey = str(msg['id']) + str(msg['from']) + str(msg['time'])            
                 if aKey not in self.already_read_ids:
                     self.already_read_ids.append(aKey)
                     self.all_msgs.append(msg)

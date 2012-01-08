@@ -21,6 +21,7 @@ class Form(QDialog):
         super(Form, self).__init__(parent)
         
         self.sms_thread = SmsThread()
+        self.sms_thread.set_credentials()
         
         self.my_html = fileio.read_html("chat.html")
         
@@ -42,9 +43,8 @@ class Form(QDialog):
         
     def start_fetching(self):
         try:
-            self.sms_thread.set_credentials()
             self.sms_thread.start()
-            QtCore.QTimer.singleShot(15000, form.start_fetching)
+            QtCore.QTimer.singleShot(5000, self.start_fetching)
         except LoginError, e:
             QMessageBox.warning(self, "Login Error",
                                 "Error logging in: " + unicode(e))
@@ -58,8 +58,9 @@ class Form(QDialog):
 
     def updateUi(self, all_msgs):
         for msg in all_msgs:
-            self.my_html += ("<div class='bubbledRight'>{0}<br/>"
-                            " {1}</div>".format(msg['from'], msg['text']))
+            self.my_html += ("<div class='bubble'><p class='from'>{0}</p>"
+                            "<p class='text'>{1}</p></div>".format(msg['from'], 
+                                                                   msg['text']))
         self.browser.setHtml(self.my_html)
  
 
