@@ -9,6 +9,7 @@ from googlevoice import Voice
 from googlevoice import util
 from PyQt4.QtCore import (QThread, SIGNAL) 
 from googlevoice.settings import INBOX
+from urllib2 import URLError
 
 class SmsThread(QThread):
     def set_credentials(self, email=None, passwd=None):
@@ -28,10 +29,13 @@ class SmsThread(QThread):
         and notify any listeners when we're done with 
         the Qt signal finished_parsing(PyQt_PyObject) 
         """
-        self.voice.login(self.email, self.passwd)
-        self.update_sms()  
-        self.emit(SIGNAL("finished_parsing(PyQt_PyObject)"), self.all_msgs)
-
+        try:
+            self.voice.login(self.email, self.passwd)
+            self.update_sms()  
+            self.emit(SIGNAL("finished_parsing(PyQt_PyObject)"), self.all_msgs)
+        except URLError, e:
+            self.emit(SIGNAL("error_logging_in(PyQt_PyObject"), e)
+        
     def extract_sms(self, htmlsms):
         """
         extractsms  --  extract SMS messages from BeautifulSoup tree 
