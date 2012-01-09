@@ -1,0 +1,8 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+<file alias="speech_bubble_left_2.png">resources/speech_bubble_left_2.png</file>
+
+<file>resources/chat.html</file>
+<file>resources/chat.css</file>
+</qresource>
+</RCC>

@@ -1,0 +1,39 @@
+.from {
+	font-size:medium;
+	font-weight:bolder;
+}
+
+.text {
+	font-size:larger;
+	margin-left:2em
+}
+
+.bubble{
+	position: relative;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	max-width: 80%;
+}
+
+.bubble{
+	float: left;
+	margin-right: auto;
+	margin-left: 36px;
+	padding: 4px 10px 4px 15px; /*position within the border*/
+
+	clear: left;
+}
+
+.bubble:before{
+	z-index: -1;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+	content: "";
+
+	border-width: 8px 10px 8px 17px; 
+	border-image: url(qrc:///speech_bubble_left_2.png) 8 10 8 17 stretch stretch;
+	-webkit-border-image: url(qrc:///speech_bubble_left_2.png) 8 10 8 17 stretch stretch;
+}
