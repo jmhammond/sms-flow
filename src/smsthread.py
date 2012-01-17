@@ -8,7 +8,7 @@ import BeautifulSoup
 from googlevoice import Voice
 from googlevoice import util
 from PyQt4.QtCore import (QThread, SIGNAL) 
-from googlevoice.settings import INBOX
+#from googlevoice.settings import INBOX
 from urllib2 import URLError
 
 class SmsThread(QThread):
