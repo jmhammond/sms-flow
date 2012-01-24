@@ -17,6 +17,8 @@ from PyQt4 import QtWebKit
 import fileio
 import qrc_resources
 
+import logging
+
 class Form(QDialog):
     def __init__(self, parent=None):
         super(Form, self).__init__(parent)
@@ -48,6 +50,9 @@ class Form(QDialog):
 
         self.setWindowTitle("Text Messages")
         
+        logging.basicConfig(filename='sms-flow.log',level=logging.DEBUG)
+        logging.info('App is Launched.')
+        
     def start_fetching(self):
         try:
             self.sms_thread.start()
@@ -65,6 +70,15 @@ class Form(QDialog):
         if not all_msgs:
             return
         self.alert.play()
+        
+        logging.debug('Received a text. Here\'s all messages')
+        logging.debug(all_msgs)        
+        
+        logging.debug('==============')
+        for msg in all_msgs:
+            logging.debug(msg)
+        logging.debug('==============')
+        logging.debug('=====End of Messages=====')
         
         for msg in all_msgs:
             self.my_html += ("<div class='bubble'><p class='from'>{0}</p>"
