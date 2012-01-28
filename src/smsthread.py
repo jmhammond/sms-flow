@@ -11,6 +11,8 @@ from PyQt4.QtCore import (QThread, SIGNAL)
 #from googlevoice.settings import INBOX
 from urllib2 import URLError
 
+import logging
+
 class SmsThread(QThread):
     def set_credentials(self, email=None, passwd=None):
         """
@@ -82,5 +84,10 @@ class SmsThread(QThread):
                     self.already_read_ids.append(aKey)
                     self.all_msgs.append(msg)
         except util.ParsingError, e:
-            self.all_msgs.append({'from':"", 'time':'12:12', 
-                                  'text':e, 'id':'12345'})
+            logging.basicConfig(filename='sms-flow.log',level=logging.ERROR)
+            logging.error('-----')
+            logging.error('There is an error parsing!')
+            logging.error(str(e))
+            logging.error('-----')
+        
+            
